@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-    private LifeBankUser user;
+    private final LifeBankUser user;
 
     public UserPrincipal(LifeBankUser user) {
         this.user = user;

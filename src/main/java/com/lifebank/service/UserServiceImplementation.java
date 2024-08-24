@@ -1,5 +1,6 @@
 package com.lifebank.service;
 
+import com.lifebank.dto.LoginDto;
 import com.lifebank.model.LifeBankUser;
 import com.lifebank.model.UserRepository;
 import com.lifebank.util.LifeBankException;
@@ -24,7 +25,7 @@ public class UserServiceImplementation implements UserServiceInterface{
 
     private final AuthenticationManager authManager;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 
     @Override
@@ -51,10 +52,11 @@ public class UserServiceImplementation implements UserServiceInterface{
         return userRepository.findAllByOrderByNameAsc();
     }
 
-    public String verify(LifeBankUser user) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+    public String verify(LoginDto userDto) {
+
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.email(), userDto.password()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getEmail());
+            return jwtService.generateToken(userDto.email());
         } else {
             return "fail";
         }
